@@ -7,7 +7,7 @@ Route::middleware('throttle:60,1')->get('/', function () {
     return ['new-feed-api', now()->toDateTimeString(), config('app.env')];
 });
 
-Route::group(['prefix' => '/v1', 'middleware' => 'throttle:150|250,1'], function () use ($router) {
+Route::group(['prefix' => '/v1'], function () use ($router) {
     /* -----  Unauthenticated Routes  ----- */
 
     $router->get('/', function () {

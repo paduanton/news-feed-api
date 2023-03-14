@@ -6,10 +6,8 @@ use App\Services\AuthenticationService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Model\OAuthRefreshTokens;
-use App\Model\OAuthAccessTokens;
-use Carbon\Carbon;
-use App\Model\Users;
+use App\Models\OAuthAccessTokens;
+use App\Models\Users;
 use Exception;
 
 class AuthController extends Controller
@@ -23,27 +21,22 @@ class AuthController extends Controller
 
     public function signup(Request $request)
     {
-        $age = $this->authService->getUserAgeLimitDate();
-
         $this->validate($request, [
             'name' => 'required|string',
+            'username' => 'username|required|unique:users',
             'email' => 'email|required|unique:users',
-            'password' => 'required|confirmed|string|min:6',
-            'birthday' => "nullable|date_format:Y/m/d|before:{$age}|after:1920-01-01",
+            'password' => 'required|string|min:6',
             'remember_me' => 'nullable|boolean',
         ]);
 
         $remember = $request['remember_me'];
-        $request['username'] = $this->authService->createUsername($request['name']);
+
         $request['password'] = $this->authService->hashPassword($request['password']);
 
         $user = Users::create($request->all());
         Auth::login($user, $remember);
 
         if ($user) {
-            $this->authService->sendWelcomedMail($user);
-            $this->verifyEmailController->verify($request, $user->id);
-
             return $this->authService->createUserAuthResource($user);
         }
 
