@@ -17,6 +17,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'ny_times_api_key' => env('NY_TIMES_API_KEY', null),
+
+    'ny_times_api_base_url' => env('NY_TIMES_API_BASE_URL', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

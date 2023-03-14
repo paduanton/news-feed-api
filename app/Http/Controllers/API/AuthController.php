@@ -36,18 +36,14 @@ class AuthController extends Controller
         );
 
         $user = Users::create($request->all());
-        Auth::login($user, $remember);
 
         if ($user) {
+            Auth::login($user, $remember);
+
             return $this->authService->createUserAuthResource($user);
         }
 
-        return response()->json(
-            [
-                'message' => "couldn't sign user up",
-            ],
-            400
-        );
+        return response()->json(['message' => "It wasn't possible to sign user up, please try again!"], 400);
     }
 
     public function login(Request $request)
@@ -64,6 +60,7 @@ class AuthController extends Controller
         Users::where($login, $request[$login])->firstOrFail();
 
         $credentials = request([$login, 'password']);
+
         if (!Auth::attempt($credentials, $remember)) {
             return response()->json(
                 [
@@ -97,19 +94,9 @@ class AuthController extends Controller
                 $accessTokenModel->refresh_token->token
             );
 
-            return response()->json(
-                [
-                    'message' => 'Logout successfully',
-                ],
-                200
-            );
+            return response()->json(['message' => 'Logout successfully'], 200);
         }
 
-        return response()->json(
-            [
-                'message' => "It wasn't possible to logout, please try again",
-            ],
-            409
-        );
+        return response()->json(['message' => "It wasn't possible to logout, please try again"], 409);
     }
 }
