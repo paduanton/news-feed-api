@@ -26,10 +26,12 @@ php artisan storage:link
 # Cleaning project caches
 php artisan config:cache
 php artisan cache:clear
+php artisan route:cache
+
 
 # Fixing some storage permissions
 chmod -R gu+w storage
 chmod -R guo+w storage
 
-# Cleaning application cache again to make sure all alterations are up-to-date
+# Cleaning application cache again to make sure all updates are up-to-date
 php artisan cache:clear

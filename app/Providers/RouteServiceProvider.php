@@ -17,6 +17,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+    protected $namespace = 'App\Http\Controllers';
+
     public const HOME = '/home';
 
     /**
@@ -26,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        // $this->configureRateLimiting();
+        $this->configureRateLimiting();
 
         // $this->routes(function () {
         //     Route::middleware('api')
@@ -47,12 +49,12 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Configure the rate limiters for the application.
      */
-    // protected function configureRateLimiting(): void
-    // {
-    //     RateLimiter::for('api', function (Request $request) {
-    //         return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-    //     });
-    // }
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+    }
 
     protected function mapApiRoutes()
     {
