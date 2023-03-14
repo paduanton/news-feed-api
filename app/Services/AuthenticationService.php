@@ -5,12 +5,12 @@ namespace App\Services;
 use Exception;
 use App\Models\Users;
 use Carbon\Carbon;
-use App\Models\OAuthAccessTokens;
 use App\Models\OAuthRefreshTokens;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserAuthResource;
 use App\Services\Interfaces\AuthenticationInterface;
+
 
 class AuthenticationService implements AuthenticationInterface
 {
@@ -74,7 +74,7 @@ class AuthenticationService implements AuthenticationInterface
         $refreshTokenId = $parseToken[0];
         OAuthRefreshTokens::where('id', $refreshTokenId)->update(["revoked" => true]);
     }
-    
+
     public function createUserAuthResource(Users $user)
     {
         $token = $user->createToken('Personal Access Token');

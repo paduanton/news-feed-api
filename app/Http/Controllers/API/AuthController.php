@@ -23,7 +23,7 @@ class AuthController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string',
-            'username' => 'username|required|unique:users',
+            'username' => 'required|unique:users',
             'email' => 'email|required|unique:users',
             'password' => 'required|string|min:6',
             'remember_me' => 'nullable|boolean',
@@ -31,7 +31,9 @@ class AuthController extends Controller
 
         $remember = $request['remember_me'];
 
-        $request['password'] = $this->authService->hashPassword($request['password']);
+        $request['password'] = $this->authService->hashPassword(
+            $request['password']
+        );
 
         $user = Users::create($request->all());
         Auth::login($user, $remember);
@@ -40,19 +42,20 @@ class AuthController extends Controller
             return $this->authService->createUserAuthResource($user);
         }
 
-        return response()->json([
-            'message' => "couldn't sign user up"
-        ], 400);
+        return response()->json(
+            [
+                'message' => "couldn't sign user up",
+            ],
+            400
+        );
     }
-
 
     public function login(Request $request)
     {
         $this->validate($request, [
-            'email' => 'email|required_without:username',
-            'username' => 'string|required_without:email',
+            'email' => 'email|required',
             'password' => 'required|string',
-            'remember_me' => 'nullable|boolean'
+            'remember_me' => 'nullable|boolean',
         ]);
 
         $remember = $request['remember_me'];
@@ -62,14 +65,21 @@ class AuthController extends Controller
 
         $credentials = request([$login, 'password']);
         if (!Auth::attempt($credentials, $remember)) {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'message' => "Invalid credentials",
-            ], 401);
+            return response()->json(
+                [
+                    'error' => 'Unauthorized',
+                    'message' => 'Invalid credentials',
+                ],
+                401
+            );
         }
 
         $user = $request->user();
-        $user->update(['password' => $this->authService->rehashPasswordIfNeeded($user->password)]);
+        $user->update([
+            'password' => $this->authService->rehashPasswordIfNeeded(
+                $user->password
+            ),
+        ]);
 
         return $this->authService->createUserAuthResource($user);
     }
@@ -83,15 +93,23 @@ class AuthController extends Controller
         $revokeAccessToken = $accessToken->revoke();
 
         if ($revokeAccessToken) {
-            $this->authService->revokeRefreshToken($accessTokenModel->refresh_token->token);
+            $this->authService->revokeRefreshToken(
+                $accessTokenModel->refresh_token->token
+            );
 
-            return response()->json([
-                'message' => 'Logout successfully'
-            ], 200);
+            return response()->json(
+                [
+                    'message' => 'Logout successfully',
+                ],
+                200
+            );
         }
 
-        return response()->json([
-            'message' => "It wasn't possible to logout, please try again"
-        ], 409);
+        return response()->json(
+            [
+                'message' => "It wasn't possible to logout, please try again",
+            ],
+            409
+        );
     }
 }
