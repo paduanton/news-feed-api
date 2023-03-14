@@ -1,8 +1,6 @@
 FROM php:8.1-fpm-alpine
 RUN apk add --no-cache openssl bash nodejs npm
 RUN docker-php-ext-install bcmath pdo pdo_mysql
-# RUN docker-php-ext-install json tokenizer
-# RUN docker-php-ext-install mbstring
 
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php

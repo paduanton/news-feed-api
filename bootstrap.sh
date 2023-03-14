@@ -1,5 +1,5 @@
 # Waiting to run the file operations until database is up
-until nc -z -v -w30 news-feed-server-db 3306
+until nc -z -v -w30 feed-server-db 3306
 do
   echo "Waiting for database connection..."
   sleep 10

@@ -1,12 +1,12 @@
 version: "3.6"
 
 networks:
-  news-feed:
+  feed:
     driver: bridge
 
 services:
   db:
-    container_name: news-feed-server-db
+    container_name: feed-server-db
     environment:
       MYSQL_ROOT_PASSWORD: "e2CS#TjE=Zs3AA"
       MYSQL_PASSWORD: ${DB_PASSWORD}
@@ -14,7 +14,7 @@ services:
       MYSQL_USER: ${DB_USERNAME}
     image: mysql:8.0
     networks:
-      - news-feed
+      - feed
     ports:
       - 3306:3306
     restart: always
@@ -22,15 +22,16 @@ services:
       - ./storage/database:/var/lib/mysql
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: news-feed-server-phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    container_name: feed-server-phpmyadmin
     networks:
-      - news-feed
+      - feed
     ports:
       - 8181:80
 
   nginx-server:
-    container_name: news-feed-server-nginx
+    container_name: feed-server-nginx
     build: ./docker/nginx
     restart: always
     ports:
@@ -40,10 +41,10 @@ services:
     depends_on:
       - php-fpm
     networks:
-      - news-feed
+      - feed
 
   php-fpm:
-    container_name: news-feed-server-php_fpm
+    container_name: feed-server-php_fpm
     restart: always
     build: ./docker/php-fpm
     volumes:
@@ -51,4 +52,4 @@ services:
     depends_on:
       - db
     networks:
-      - news-feed
+      - feed
