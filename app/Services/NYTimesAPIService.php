@@ -40,7 +40,7 @@ class NYTimesAPIService implements NYTimesAPIInterface
 
         $httpResponse = $this->guzzleClient->request(
             'GET',
-            $this->newYorkTimesAPIBaseURL,
+            $this->newYorkTimesAPIBaseURL . "/articlesearch.json",
             [
                 'query' => [
                     'api-key' => $this->newYorkTimesAPIKey,

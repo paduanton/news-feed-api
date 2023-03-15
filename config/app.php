@@ -18,8 +18,11 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     'ny_times_api_key' => env('NY_TIMES_API_KEY', null),
+    'ny_times_api_base_url' => env('NY_TIMES_API_BASE_URL', "https://api.nytimes.com/svc/search/v2"),
 
-    'ny_times_api_base_url' => env('NY_TIMES_API_BASE_URL', null),
+    'news_api_org_api_key' => env('NEWS_API_ORG_API_KEY', null),
+    'news_api_org_api_base_url' => env('NEWS_API_ORG_API_KEY_BASE_URL', "https://newsapi.org/v2"),
+
 
     /*
     |--------------------------------------------------------------------------
