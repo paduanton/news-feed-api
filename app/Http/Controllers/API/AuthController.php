@@ -43,7 +43,13 @@ class AuthController extends Controller
             return $this->authService->createUserAuthResource($user);
         }
 
-        return response()->json(['message' => "It wasn't possible to sign user up, please try again!"], 400);
+        return response()->json(
+            [
+                'message' =>
+                    "It wasn't possible to sign user up, please try again!",
+            ],
+            400
+        );
     }
 
     public function login(Request $request)
@@ -97,6 +103,9 @@ class AuthController extends Controller
             return response()->json(['message' => 'Logout successfully'], 200);
         }
 
-        return response()->json(['message' => "It wasn't possible to logout, please try again"], 409);
+        return response()->json(
+            ['message' => "It wasn't possible to logout, please try again"],
+            409
+        );
     }
 }

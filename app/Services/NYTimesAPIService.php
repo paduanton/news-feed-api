@@ -1,9 +1,9 @@
 <?php
 
 use GuzzleHttp\Client as GuzzleClient;
-use App\Services\Interfaces\ArticleInterface;
+use App\Services\Interfaces\NYTimesAPIInterface;
 
-class ArticleServiceAPI implements ArticleInterface
+class NYTimesAPIService implements NYTimesAPIInterface
 {
     private $newYorkTimesAPIKey;
     private $newYorkTimesAPIBaseURL;
@@ -51,7 +51,12 @@ class ArticleServiceAPI implements ArticleInterface
             ]
         );
 
-        $response = $httpResponse->getBody();
+        return $this->parseArticlesResponseBody($httpResponse->getBody());
+    }
+
+    private function parseArticlesResponseBody($responseBody)
+    {
+        return json_decode($responseBody, true);
     }
 
     private function parseQueryStringNYTimesAPIPattern(array $content): string
