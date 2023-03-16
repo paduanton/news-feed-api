@@ -35,4 +35,3 @@ chmod -R guo+w storage
 
 # Cleaning application cache again to make sure all updates are up-to-date
 php artisan cache:clear
-php artisan optimize:clear
