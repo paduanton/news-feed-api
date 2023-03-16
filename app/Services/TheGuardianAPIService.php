@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Support\Str;
+namespace App\Services;
+
 use GuzzleHttp\Client as GuzzleClient;
 use App\Services\Interfaces\TheGuardianAPIInterface;
 

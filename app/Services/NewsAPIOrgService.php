@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Services;
+
 use Illuminate\Support\Str;
 use GuzzleHttp\Client as GuzzleClient;
 use App\Services\Interfaces\NewsAPIOrgInterface;
@@ -115,7 +117,9 @@ class NewsAPIOrgService implements NewsAPIOrgInterface
 
     private function parseArticlesResponseBody($responseBody)
     {
-        return json_decode($responseBody, true);
+        $body = json_decode($responseBody, true);
+
+        return $body["articles"];
     }
 
     private function parseSourcesResponseBody($responseBody)
