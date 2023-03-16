@@ -33,17 +33,11 @@ Route::group(['prefix' => '/v1', 'middleware' => 'throttle:60,1'], function () u
         $router->get('/user', function (Request $request) {
             return $request->user();
         });
-        // $router->patch('/users/{id}', 'API\UsersController@update');
 
         /*
             Article Routes
         */
 
-        // $router->get('/articles/{keyword}/search', 'API\ArticlesController@search');
-
-        /*
-            Feed Routes
-        */
-
+        $router->get('/articles/{keyword}/search', 'API\ArticlesController@search');
     });
 });
