@@ -12,13 +12,19 @@ use App\Models\FeedPreferences;
 
 class FeedPreferencesController extends Controller
 {
-    public function __construct()
-    {
+    protected $userModel, $feedPreferences;
+
+    public function __construct(
+        Users $userModel,
+        FeedPreferences $feedPreferences
+    ) {
+        $this->userModel = $userModel;
+        $this->feedPreferences = $feedPreferences;
     }
 
     public function getFeedPreferencesByUsersId(Request $request, $usersId)
     {
-        $user = Users::findOrFail($usersId);
+        $user = $this->userModel->getUserById($usersId);
         $userFeedPreferences = $user->feedPreferences;
 
         if ($userFeedPreferences->isEmpty()) {
@@ -39,15 +45,19 @@ class FeedPreferencesController extends Controller
             ],
         ]);
 
-        Users::findOrFail($usersId);
+        $this->userModel->getUserById($usersId);
 
-        $feedPreferences = [
+        
+
+        $feedPreferenceData = [
             'users_id' => $usersId,
             'content' => $request['content'],
             'type' => $request['type'],
         ];
 
-        $feedPreferences = FeedPreferences::create($feedPreferences);
+        $feedPreferences = $this->feedPreferences->createFeedPreference(
+            $feedPreferenceData
+        );
 
         if ($feedPreferences) {
             return new FeedPreferencesResource($feedPreferences);
@@ -63,16 +73,19 @@ class FeedPreferencesController extends Controller
 
     public function destroy($id)
     {
-        FeedPreferences::findOrFail($id);
+        $this->feedPreferences->getFeedPreferencesById($id);
 
-        $delete = FeedPreferences::where('id', $id)->delete();
+        $delete = $this->feedPreferences->deleteFeedPreference($id);
 
         if ($delete) {
             return response()->json([], 204);
         }
 
-        return response()->json([
-            'message' => 'could not delete feed preferences data',
-        ], 400);
+        return response()->json(
+            [
+                'message' => 'could not delete feed preferences data',
+            ],
+            400
+        );
     }
 }

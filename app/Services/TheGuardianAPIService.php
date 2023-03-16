@@ -4,6 +4,14 @@ use Illuminate\Support\Str;
 use GuzzleHttp\Client as GuzzleClient;
 use App\Services\Interfaces\TheGuardianAPIInterface;
 
+// TODO
+/*
+    - Create a Business layer to put all logic and businesses rules inside of it, this way we can implement a better the SOLID principles
+      and remove business logic from Services and Controllers
+
+    The flow should be: Controller -> Business -> Model/Services
+*/
+
 class TheGuardianAPIService implements TheGuardianAPIInterface
 {
     private $theGuardianAPIKey;

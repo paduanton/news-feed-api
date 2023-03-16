@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserAuthResource;
 use App\Services\Interfaces\AuthenticationInterface;
 
-
 class AuthenticationService implements AuthenticationInterface
 {
     public function __construct()

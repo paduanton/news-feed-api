@@ -12,11 +12,14 @@ use Exception;
 
 class AuthController extends Controller
 {
-    protected $authService, $verifyEmailController;
+    protected $authService, $verifyEmailController, $userModel;
 
-    public function __construct(AuthenticationService $authService)
-    {
+    public function __construct(
+        AuthenticationService $authService,
+        Users $userModel
+    ) {
         $this->authService = $authService;
+        $this->userModel = $userModel;
     }
 
     public function signup(Request $request)
@@ -35,7 +38,7 @@ class AuthController extends Controller
             $request['password']
         );
 
-        $user = Users::create($request->all());
+        $user = $this->userModel->createUser($request->all());
 
         if ($user) {
             Auth::login($user, $remember);
@@ -61,11 +64,10 @@ class AuthController extends Controller
         ]);
 
         $remember = $request['remember_me'];
-        $login = isset($request['username']) ? 'username' : 'email';
 
-        Users::where($login, $request[$login])->firstOrFail();
+        $user = $this->userModel->getUserByEmail($request['email']);
 
-        $credentials = request([$login, 'password']);
+        $credentials = request(['email', 'password']);
 
         if (!Auth::attempt($credentials, $remember)) {
             return response()->json(
@@ -77,12 +79,14 @@ class AuthController extends Controller
             );
         }
 
-        $user = $request->user();
-        $user->update([
-            'password' => $this->authService->rehashPasswordIfNeeded(
-                $user->password
-            ),
-        ]);
+        $this->userModel->updateUser(
+            [
+                'password' => $this->authService->rehashPasswordIfNeeded(
+                    $user->password
+                ),
+            ],
+            $user->id
+        );
 
         return $this->authService->createUserAuthResource($user);
     }

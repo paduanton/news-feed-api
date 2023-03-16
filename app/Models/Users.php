@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -14,13 +13,29 @@ class Users extends Authenticatable
 
     protected $table = 'users';
 
-    protected $fillable = [
-        'name', 'username', 'email', 'password'
-    ];
+    protected $fillable = ['name', 'username', 'email', 'password'];
 
-    protected $hidden = [
-        'password', 'remember_token', 'deleted_at'
-    ];
+    protected $hidden = ['password', 'remember_token', 'deleted_at'];
+
+    public function getUserById($id)
+    {
+        return Users::findOrFail($id);
+    }
+
+    public function getUserByEmail($email)
+    {
+        return Users::where('email', $email)->firstOrFail();
+    }
+
+    public function createUser($userData)
+    {
+        return Users::create($userData);
+    }
+
+    public function updateUser($userData, $id)
+    {
+        return Users::where('id', $id)->firstOrFail()->update($userData);
+    }
 
     public function accessTokens()
     {
@@ -31,7 +46,6 @@ class Users extends Authenticatable
     {
         return $this->hasMany(FeedPreferences::class, 'users_id');
     }
-
 
     public function passwordResets()
     {
