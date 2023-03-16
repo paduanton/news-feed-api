@@ -30,7 +30,7 @@ Route::group(['prefix' => '/v1', 'middleware' => 'throttle:60,1'], function () u
             Users Routes
         */
 
-        $router->post('/users/{id}', 'API\UsersController@show');
+        $router->get('/users/{id}', 'API\UsersController@show');
 
 
         /*
@@ -38,5 +38,12 @@ Route::group(['prefix' => '/v1', 'middleware' => 'throttle:60,1'], function () u
         */
 
         $router->get('/articles/{keyword}/search', 'API\ArticlesController@search');
+
+        /*
+            Feed Preferences Routes
+        */
+
+        $router->get('/users/{usersId}/feed_preferences', 'API\FeedPreferencesController@getFeedPreferencesByUsersId');
+
     });
 });
