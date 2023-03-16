@@ -7,7 +7,7 @@ use App\Services\Interfaces\TheGuardianAPIInterface;
 
 // TODO
 /*
-    - Create a Business layer to put all logic and businesses rules inside of it, this way we can implement a better the SOLID principles
+    - Create a Business layer to put all logic and businesses rules inside of it, this way we can implement a better approach of SOLID principles
       and remove business logic from Services and Controllers
 
     The flow should be: Controller -> Business -> Model/Services
@@ -49,15 +49,34 @@ class TheGuardianAPIService implements TheGuardianAPIInterface
             );
 
             $articlesResponseBody = $this->parseArticlesResponseBody($httpResponse->getBody());
-            $articles = array_merge($articles, $articlesResponseBody["response"]["results"]);
+            $articles = array_merge($articles, $articlesResponseBody);
         }
 
         return $articles;
     }
 
 
+    private function formatArticleContent($articleContent) {
+        return array
+        (
+            'title' => $articleContent["webTitle"],
+            'section' => $articleContent["pillarName"],
+            'image_url' => null,
+            'category' => $articleContent["sectionName"],
+            'author' => null,
+            'source' => "The Guardian",
+            'source_url' => $articleContent["webUrl"],
+            'published_at' => $articleContent["webPublicationDate"]->toDateTimeString(),
+        );
+    }
+
     private function parseArticlesResponseBody($responseBody)
     {
-        return json_decode($responseBody, true);
+        $body = json_decode($responseBody, true);
+        $articles = $body["response"]["results"];
+
+        $formattedArticles = array_map(array($this, 'formatArticleContent'), $articles);
+
+        return $formattedArticles;
     }
 }

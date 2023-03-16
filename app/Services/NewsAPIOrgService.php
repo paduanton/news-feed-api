@@ -115,11 +115,29 @@ class NewsAPIOrgService implements NewsAPIOrgInterface
         return $sourcesList;
     }
 
+    private function formatArticleContent($articleContent) {
+        return array
+        (
+            'title' => $articleContent["title"],
+            'summary' => $articleContent["description"],
+            'section' => null,
+            'image_url' => $articleContent["urlToImage"],
+            'category' => null,
+            'author' => $articleContent["author"],
+            'source' => $articleContent["source"]["name"],
+            'source_url' => $articleContent["url"],
+            'published_at' => $articleContent["publishedAt"]->toDateTimeString(),
+        );
+    }
+
     private function parseArticlesResponseBody($responseBody)
     {
         $body = json_decode($responseBody, true);
+        $articles = $body["articles"];
 
-        return $body["articles"];
+        $formattedArticles = array_map(array($this, 'formatArticleContent'), $articles);
+
+        return $formattedArticles;
     }
 
     private function parseSourcesResponseBody($responseBody)

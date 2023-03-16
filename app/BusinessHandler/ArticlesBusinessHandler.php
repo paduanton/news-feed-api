@@ -22,17 +22,17 @@ class ArticlesBusinessHandler
         $this->newsAPIOrgService = $newsAPIOrgService;
     }
 
-    public function getAgregatedArticles(
-        string $categories,
-        string $sources,
-        string $authors,
-        string $keyword,
-        string $dateSort
+    public function getAggregatedArticles(
+        $categories,
+        $sources,
+        $authors,
+        $keyword,
+        $dateSort
     )
     {
-        $sources = explode(",", $sources);
-        $categories = explode(",", $categories);
-        $authors = explode(",", $authors);
+        $sources = $sources ? explode(",", $sources) : [];
+        $categories = $categories ? explode(",", $categories) : [];
+        $authors = $authors ? explode(",", $authors) : [];
 
         $newYorkTimesArticles = $this->newYorkTimesAPIService->getArticles(
             $categories,
@@ -45,7 +45,7 @@ class ArticlesBusinessHandler
             $keyword,
             $dateSort
         );
-        $newsAPIOrgArticles= $this->newsAPIOrgService->getArticles(
+        $newsAPIOrgArticles = $this->newsAPIOrgService->getArticles(
             $categories,
             $sources,
             $authors,

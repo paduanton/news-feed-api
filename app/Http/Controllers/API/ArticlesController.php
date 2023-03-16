@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\BusinessHandler\ArticlesBusinessHandler;
 
+
 class ArticlesController extends Controller
 {
 
@@ -26,16 +27,19 @@ class ArticlesController extends Controller
         $categories = $request->query('categories');
         $dateSort = $request->query('dateSort');
 
-        return response()->json(
-            $this->articlesBusinessHandler->getAgregatedArticles(
-                 $categories,
-                 $sources,
-                 $authors,
-                 $keyword,
-                 $dateSort
-            ),
-            200
+        $aggregatedArticles = $this->articlesBusinessHandler->getAggregatedArticles(
+            $categories,
+            $sources,
+            $authors,
+            $keyword,
+            $dateSort
         );
 
+        return response()->json([
+            "total_results" => count($aggregatedArticles),
+            "articles" => $aggregatedArticles,
+        ],
+            200
+        );
     }
 }

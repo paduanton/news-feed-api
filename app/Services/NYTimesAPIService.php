@@ -36,8 +36,8 @@ class NYTimesAPIService implements NYTimesAPIInterface
             $categories
         );
         $parsedSources = $this->parseQueryStringNYTimesAPIPattern($sources);
-        $filterQuerySources = 'news_desk:(' . $parsedCategories . ')';
-        $filterQueryCategories = 'source:(' . $parsedSources . ')';
+        $filterQueryCategories = 'news_desk:(' . $parsedCategories . ')';
+        $filterQuerySources = 'source:(' . $parsedSources . ')';
         $generalFilterQuery = '';
 
         if (!empty($categories) && !empty($sources)) {
@@ -45,7 +45,7 @@ class NYTimesAPIService implements NYTimesAPIInterface
         } elseif (!empty($categories)) {
             $generalFilterQuery = $filterQueryCategories;
         } elseif (!empty($sources)) {
-            $generalFilterQuery = $filterQueryCategories;
+            $generalFilterQuery = $filterQuerySources;
         }
 
         $httpResponse = $this->guzzleClient->request(
@@ -64,9 +64,37 @@ class NYTimesAPIService implements NYTimesAPIInterface
         return $this->parseArticlesResponseBody($httpResponse->getBody());
     }
 
+    private function formatArticleContent($articleContent) {
+        $articleHasImage = count($articleContent["multimedia"]) > 0;
+
+        if($articleHasImage) {
+            $articleMainImage = "https://www.nytimes.com/" . $articleContent["multimedia"][0]["url"];
+        } else {
+            $articleMainImage = null;
+
+        }
+
+        return array
+        (
+            'title' => $articleContent["headline"]["main"],
+            'section' => $articleContent["section_name"],
+            'image_url' => $articleMainImage,
+            'category' => $articleContent["news_desk"],
+            'author' => $articleContent["byline"]["original"],
+            'source' => $articleContent["source"],
+            'source_url' => $articleContent["web_url"],
+            'published_at' => $articleContent["pub_date"]->toDateTimeString(),
+        );
+    }
+
     private function parseArticlesResponseBody($responseBody)
     {
-        return json_decode($responseBody, true);
+        $body = json_decode($responseBody, true);
+        $articles = $body["response"]["docs"];
+
+        $formattedArticles = array_map(array($this, 'formatArticleContent'), $articles);
+
+        return $formattedArticles;
     }
 
     private function parseQueryStringNYTimesAPIPattern(array $content): string
