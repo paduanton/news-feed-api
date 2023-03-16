@@ -1,66 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Overview
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+News Feed API is an open source project that implements social media and social networking concepts. It was developed in PHP using the Laravel Framework 10, MySQL database and MVC design pattern. This repository is the Restful API backend only. The frontend is written in ReactJs and can be seen here:
 
-## About Laravel
+[News Feed Frontend](https://github.com/paduanton/news-feed-ui)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Application Architecture
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This API has the following entities: Users, FeedPreferences, OAuthAuthCodes, OAuthAccessTokens, OAuthRefreshTokens, OAuthClients, OAuthPersonalAccessClients and Migrations.
+### ER Database Diagram
+(click the image to zoom it or just download the image and zoom it by yourself so you can see better all tables relationships =D)
+![](https://raw.githubusercontent.com/paduanton/news-feed-api/main/docs/ER-diagram.png)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### Entity Relationship:
+- Users 1 - N FeedPreferences
+- Users N - OAuthAuthCodes - N OAuthClients
+- Users N - OAuthAccessTokens - N OAuthClients
+- OAuthAccessTokens 1 - 1 OAuthRefreshTokens
+- OAuthPersonalAccessClients 1 - 1 OAuthClients
+- PasswordResets
 
-## Learning Laravel
+This application a couple of features such as user sign up, user log-in, retrieve user data, personalize news feed preferences and search for Articles in multiple sources like: NewsAPI.org, The Guardian and The New York Times.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## System Requirements (Mac OS, Windows or Linux)
+* [Docker](https://www.docker.com/get-started)
+* [Docker Compose](https://docs.docker.com/compose/install)
+* [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Project Setup
 
-## Laravel Sponsors
+After clonning the repo, run the following commands on bash, inside the root directory:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Copy environment variables of the project: (Notice as this project supports API integration with <b>NewsAPI.org, The Guardian and The New York Times </b>, it means that you MUST set the the api keys for each one of these API's)
+```
+cp .env.example .env
+```
 
-### Premium Partners
+Install project dependencies:
+```
+composer install
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Build project artifacts:
+```
+docker-compose build --no-cache
+```
 
-## Contributing
+Run project:
+```
+docker-compose up
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Install dependencies and set directory permissions and cache:
+```
+docker exec -it feed-server-php_fpm /bin/sh bootstrap.sh
+```
 
-## Code of Conduct
+### Notes: 
+- Remember to set all the API keys under .env file
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+After all these steps, the project will be running on port 8080: http://localhost:8080. All http requests send and receive JSON data.
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+To view changes in the database, go to http://localhost.cooking:8181/ on browser and you will be able to access phpmyadmin.
 
-## License
+#### OAuth2 User Authentication:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+In this API, through Laravel Framework it has been built an OAuth2 related authentication using the library [Passport](https://laravel.com/docs/10.x/passport), then it's possible to consume server side authentication using [JWT](https://jwt.io).
+
+#### Notes:
+
+In **./bootstrap.sh** file are all the commands required to build this project, so, in order to make any changes inside the container, or if you wish to run any other commands, you must run this script and update this file further on if you need to.
+
+- In **all** http requests you must provide the the headers `Accept:application/json`. In POST http requests you need to set the header `Content-Type:application/json`.
+
+- After you hit the sign up or login endpoints, you will be able to get the access_token which will be required on further requests.
+
+- In all http request (except Signup and Login) you need to provide the authentication header:
+  
+```
+Authorization: Bearer eyJ0eXAiOiJKV1QiL.CJhbGciOiJSUzI1NiIm.p0aSI6Ic4ZDAwNG
+```
+
+## Documentation
+
+You can access the Restful API public documentarion in the link below or [clicking here](https://www.postman.com/paduanton/workspace/antonio-de-pdua-s-public-workspace/collection/5889563-b36b58e4-f3fc-4211-b41c-ecec2bf83545?ctx=documentation). 
+
+https://www.postman.com/paduanton/workspace/antonio-de-pdua-s-public-workspace/collection/5889563-b36b58e4-f3fc-4211-b41c-ecec2bf83545?ctx=documentation
