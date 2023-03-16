@@ -22,7 +22,7 @@ class ArticlesBusinessHandler
         $this->newsAPIOrgService = $newsAPIOrgService;
     }
 
-    public function getArticles(
+    public function getAgregatedArticles(
         string $categories,
         string $sources,
         string $authors,
@@ -52,9 +52,9 @@ class ArticlesBusinessHandler
             $keyword,
             $dateSort
         );
-        
-        $allArticles = array_merge($newYorkTimesArticles, $theGuardianArticles, $newsAPIOrgArticles);
 
-       return $allArticles;
+        $agregatedArticles = array_merge($newYorkTimesArticles, $theGuardianArticles, $newsAPIOrgArticles);
+
+       return $agregatedArticles;
     }
 }

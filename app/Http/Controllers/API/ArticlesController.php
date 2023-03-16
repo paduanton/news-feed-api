@@ -27,7 +27,7 @@ class ArticlesController extends Controller
         $dateSort = $request->query('dateSort');
 
         return response()->json(
-            $this->articlesBusinessHandler->getArticles(
+            $this->articlesBusinessHandler->getAgregatedArticles(
                  $categories,
                  $sources,
                  $authors,
