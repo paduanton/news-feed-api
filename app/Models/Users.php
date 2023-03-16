@@ -27,6 +27,12 @@ class Users extends Authenticatable
         return $this->hasMany(OAuthAccessTokens::class, 'user_id');
     }
 
+    public function feed_preferences()
+    {
+        return $this->hasMany(FeedPreferences::class, 'users_id');
+    }
+
+
     public function password_resets()
     {
         return $this->hasMany(PasswordResets::class, 'email', 'email');

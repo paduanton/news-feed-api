@@ -30,9 +30,8 @@ Route::group(['prefix' => '/v1', 'middleware' => 'throttle:60,1'], function () u
             Users Routes
         */
 
-        $router->get('/user', function (Request $request) {
-            return $request->user();
-        });
+        $router->post('/users/{id}', 'API\UsersController@show');
+
 
         /*
             Article Routes
