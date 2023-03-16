@@ -63,7 +63,7 @@ docker exec -it feed-server-php_fpm /bin/sh bootstrap.sh
 After all these steps, the project will be running on port 8080: http://localhost:8080. All http requests send and receive JSON data.
 
 
-To view changes in the database, go to http://localhost.cooking:8181/ on browser and you will be able to access phpmyadmin.
+To view changes in the database, go to http://localhost:8181/ on browser and you will be able to access phpmyadmin.
 
 #### OAuth2 User Authentication:
 
