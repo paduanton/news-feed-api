@@ -5,10 +5,11 @@ News Feed API is an open source project that implements social media and social 
 [News Feed Frontend](https://github.com/paduanton/news-feed-ui)
 
 ## Application Architecture
+![](https://raw.githubusercontent.com/paduanton/news-feed-api/main/docs/Application-Architecture.png)
 
 This API has the following entities: Users, FeedPreferences, OAuthAuthCodes, OAuthAccessTokens, OAuthRefreshTokens, OAuthClients, OAuthPersonalAccessClients and Migrations.
 ### ER Database Diagram
-(click the image to zoom it or just download the image and zoom it by yourself so you can see better all tables relationships =D)
+(click the image to zoom it or just download the image and zoom it by yourself so you can see better all tables relationships)
 ![](https://raw.githubusercontent.com/paduanton/news-feed-api/main/docs/ER-diagram.png)
 
 #### Entity Relationship:
