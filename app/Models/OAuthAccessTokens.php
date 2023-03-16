@@ -22,7 +22,7 @@ class OAuthAccessTokens extends Model
         return $this->belongsTo(Users::class, 'user_id');
     }
 
-    public function refresh_token()
+    public function refreshToken()
     {
         return $this->hasOne(OAuthRefreshTokens::class, 'access_token_id');
     }

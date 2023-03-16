@@ -97,7 +97,7 @@ class AuthController extends Controller
 
         if ($revokeAccessToken) {
             $this->authService->revokeRefreshToken(
-                $accessTokenModel->refresh_token->token
+                $accessTokenModel->refreshToken->token
             );
 
             return response()->json(['message' => 'Logout successfully'], 200);

@@ -13,7 +13,7 @@ class FeedPreferences extends Authenticatable
 
     protected $table = 'feed_preferences';
 
-    protected $fillable = ['content', 'type'];
+    protected $fillable = ['users_id', 'content', 'type'];
 
     protected $hidden = ['deleted_at'];
 

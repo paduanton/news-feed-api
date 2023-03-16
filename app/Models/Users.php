@@ -22,18 +22,18 @@ class Users extends Authenticatable
         'password', 'remember_token', 'deleted_at'
     ];
 
-    public function access_tokens()
+    public function accessTokens()
     {
         return $this->hasMany(OAuthAccessTokens::class, 'user_id');
     }
 
-    public function feed_preferences()
+    public function feedPreferences()
     {
         return $this->hasMany(FeedPreferences::class, 'users_id');
     }
 
 
-    public function password_resets()
+    public function passwordResets()
     {
         return $this->hasMany(PasswordResets::class, 'email', 'email');
     }

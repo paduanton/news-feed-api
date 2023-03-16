@@ -11,6 +11,7 @@ return new class extends Migration
     {
         Schema::create('feed_preferences', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('users_id');
             $table->string('content');
             $table->enum('type', ['category', 'author', 'source', 'keyword', 'date']);
             $table->timestampsTz(0);
@@ -19,7 +20,7 @@ return new class extends Migration
         });
     }
 
-    
+
     public function down(): void
     {
         Schema::dropIfExists('feed_preferences');

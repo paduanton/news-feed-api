@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Services\AuthenticationService;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\OAuthAccessTokens;
 use App\Http\Resources\UsersResource;
 
 class UsersController extends Controller
 {
-    protected $authService, $verifyEmailController;
 
-    public function __construct(AuthenticationService $authService)
+    public function __construct()
     {
-        $this->authService = $authService;
     }
 
     public function show(Request $request, $id)
