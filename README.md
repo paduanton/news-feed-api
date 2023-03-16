@@ -1,6 +1,7 @@
 # Overview
 
-News Feed API is an open source project that implements social media and social networking concepts. It was developed in PHP using the Laravel Framework 10, MySQL database and MVC design pattern. This repository is the Restful API backend only. The frontend is written in ReactJs and can be seen here:
+News Feed is an open source project that implements a news
+aggregator website that pulls articles from various sources. It was developed in PHP using the Laravel Framework 10, MySQL database and MVC design pattern. This repository is the Restful API backend only. The frontend is written in ReactJS and can be seen here:
 
 [News Feed Frontend](https://github.com/paduanton/news-feed-ui)
 
