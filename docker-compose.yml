@@ -1,0 +1,55 @@
+version: "3.6"
+
+networks:
+  feed:
+    driver: bridge
+
+services:
+  db:
+    container_name: feed-server-db
+    environment:
+      MYSQL_ROOT_PASSWORD: "e2CS#TjE=Zs3AA"
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+    image: mysql:8.0
+    networks:
+      - feed
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - ./storage/database:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    container_name: feed-server-phpmyadmin
+    networks:
+      - feed
+    ports:
+      - 8181:80
+
+  nginx-server:
+    container_name: feed-server-nginx
+    build: ./docker/nginx
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - php-fpm
+    networks:
+      - feed
+
+  php-fpm:
+    container_name: feed-server-php_fpm
+    restart: always
+    build: ./docker/php-fpm
+    volumes:
+      - ./:/var/www/
+    depends_on:
+      - db
+    networks:
+      - feed

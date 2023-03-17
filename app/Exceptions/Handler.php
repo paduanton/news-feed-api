@@ -2,8 +2,12 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 
 class Handler extends ExceptionHandler
 {
@@ -44,5 +48,45 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function report(Throwable $exception)
+    {
+        parent::report($exception);
+    }
+
+    public function render($request, Throwable $exception)
+    {
+
+        if ($exception instanceof ModelNotFoundException) {
+            $message = $exception->getMessage() ? $exception->getMessage() : 'There is no data';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => $message,
+                    'error' => 'Model not found in the server'
+                ], 404);
+            }
+
+            return redirect('/v1/notfound');
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            return response()->json([
+                'message' => 'User unauthenticated',
+            ], 401);
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Invalid route',
+                ], 404);
+            }
+
+            return redirect('/v1/fallback');
+        }
+
+        return parent::render($request, $exception);
     }
 }
