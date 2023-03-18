@@ -66,7 +66,7 @@ class TheGuardianAPIService implements TheGuardianAPIInterface
             'author' => null,
             'source' => "The Guardian",
             'source_url' => $articleContent["webUrl"],
-            'published_at' => $articleContent["webPublicationDate"]->toDateTimeString(),
+            'published_at' => $articleContent["webPublicationDate"],
         );
     }
 

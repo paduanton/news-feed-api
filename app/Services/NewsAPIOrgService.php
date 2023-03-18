@@ -126,7 +126,7 @@ class NewsAPIOrgService implements NewsAPIOrgInterface
             'author' => $articleContent["author"],
             'source' => $articleContent["source"]["name"],
             'source_url' => $articleContent["url"],
-            'published_at' => $articleContent["publishedAt"]->toDateTimeString(),
+            'published_at' => $articleContent["publishedAt"],
         );
     }
 

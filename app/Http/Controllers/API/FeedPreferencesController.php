@@ -48,16 +48,15 @@ class FeedPreferencesController extends Controller
         $this->userModel->getUserById($usersId);
 
         if ($request['type'] === 'keyword') {
-            $isKeyWordDuplicated = $this->feedPreferences->getFeedPreferencesByContentAndType(
-                $request['content'],
+            $userHasMoreThanOneKeyword = $this->feedPreferences->getFeedPreferencesByType(
                 $request['type']
             );
 
-            if ($isKeyWordDuplicated) {
+            if ($userHasMoreThanOneKeyword) {
                 return response()->json(
                     [
                         'message' =>
-                            'You already have this keyword on your preferences',
+                            'You already have a keyword on your preferences',
                     ],
                     400
                 );

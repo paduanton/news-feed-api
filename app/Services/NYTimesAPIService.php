@@ -83,7 +83,7 @@ class NYTimesAPIService implements NYTimesAPIInterface
             'author' => $articleContent["byline"]["original"],
             'source' => $articleContent["source"],
             'source_url' => $articleContent["web_url"],
-            'published_at' => $articleContent["pub_date"]->toDateTimeString(),
+            'published_at' => $articleContent["pub_date"],
         );
     }
 

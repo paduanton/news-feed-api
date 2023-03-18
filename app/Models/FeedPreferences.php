@@ -20,11 +20,9 @@ class FeedPreferences extends Model
         return FeedPreferences::findOrFail($id);
     }
 
-    public function getFeedPreferencesByContentAndType($content, $type)
+    public function getFeedPreferencesByType($type)
     {
-        return FeedPreferences::where('content', $content)
-            ->where('type', $type)
-            ->first();
+        return FeedPreferences::where('type', $type);
     }
 
     public function deleteFeedPreference($id)
