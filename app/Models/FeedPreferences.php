@@ -22,7 +22,7 @@ class FeedPreferences extends Model
 
     public function getFeedPreferencesByType($type)
     {
-        return FeedPreferences::where('type', $type);
+        return FeedPreferences::where('type', $type)->get();
     }
 
     public function deleteFeedPreference($id)

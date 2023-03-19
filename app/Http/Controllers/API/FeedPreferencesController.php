@@ -52,7 +52,8 @@ class FeedPreferencesController extends Controller
                 $request['type']
             );
 
-            if (!empty($keywordFeedPreferences)) {
+
+            if (!$keywordFeedPreferences->isEmpty()) {
                 return response()->json(
                     [
                         'message' =>
