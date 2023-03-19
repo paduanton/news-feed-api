@@ -48,11 +48,11 @@ class FeedPreferencesController extends Controller
         $this->userModel->getUserById($usersId);
 
         if ($request['type'] === 'keyword') {
-            $userHasMoreThanOneKeyword = $this->feedPreferences->getFeedPreferencesByType(
+            $keywordFeedPreferences = $this->feedPreferences->getFeedPreferencesByType(
                 $request['type']
             );
 
-            if ($userHasMoreThanOneKeyword) {
+            if (!empty($keywordFeedPreferences)) {
                 return response()->json(
                     [
                         'message' =>
